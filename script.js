@@ -40,8 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const row = tbody.insertRow();
             row.insertCell().textContent = item.Exercise;
             row.insertCell().appendChild(createDayDropdown(item.Day));
-            const timeCell = row.insertCell();
-            timeCell.appendChild(createTimeDropdown(item.Time));
+            row.insertCell().appendChild(createTimeDropdown(item.Time));
             row.insertCell().textContent = item.Sets;
             row.insertCell().textContent = item.Reps;
             row.insertCell().textContent = item.Description;
