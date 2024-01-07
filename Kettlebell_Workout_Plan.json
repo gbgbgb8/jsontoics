@@ -1,6 +1,7 @@
 [
     {
         "Day": "Monday",
+        "Time": "09:00",
         "Exercise": "Kettlebell Swings",
         "Sets": "3",
         "Reps": "10",
@@ -8,6 +9,7 @@
     },
     {
         "Day": "Monday",
+        "Time": "11:00",
         "Exercise": "Goblet Squats",
         "Sets": "3",
         "Reps": "8",
@@ -15,6 +17,7 @@
     },
     {
         "Day": "Monday",
+        "Time": "13:00",
         "Exercise": "Single-Arm Kettlebell Rows",
         "Sets": "3",
         "Reps": "8 each arm",
@@ -22,6 +25,7 @@
     },
     {
         "Day": "Monday",
+        "Time": "15:00",
         "Exercise": "Kettlebell Deadlifts",
         "Sets": "3",
         "Reps": "10",
@@ -29,6 +33,7 @@
     },
     {
         "Day": "Wednesday",
+        "Time": "09:00",
         "Exercise": "Turkish Get-Ups",
         "Sets": "2",
         "Reps": "5 each side",
@@ -36,6 +41,7 @@
     },
     {
         "Day": "Wednesday",
+        "Time": "11:00",
         "Exercise": "Kettlebell Windmills",
         "Sets": "3",
         "Reps": "6 each side",
@@ -43,6 +49,7 @@
     },
     {
         "Day": "Wednesday",
+        "Time": "13:00",
         "Exercise": "Kettlebell Russian Twists",
         "Sets": "3",
         "Reps": "15",
@@ -50,6 +57,7 @@
     },
     {
         "Day": "Wednesday",
+        "Time": "15:00",
         "Exercise": "Kettlebell Halo",
         "Sets": "3",
         "Reps": "8 each direction",
@@ -57,6 +65,7 @@
     },
     {
         "Day": "Friday",
+        "Time": "09:00",
         "Exercise": "Kettlebell Clean and Press",
         "Sets": "3",
         "Reps": "6 each arm",
@@ -64,6 +73,7 @@
     },
     {
         "Day": "Friday",
+        "Time": "11:00",
         "Exercise": "Kettlebell Lunges",
         "Sets": "3",
         "Reps": "8 each leg",
@@ -71,6 +81,7 @@
     },
     {
         "Day": "Friday",
+        "Time": "13:00",
         "Exercise": "Kettlebell High Pulls",
         "Sets": "3",
         "Reps": "10",
@@ -78,6 +89,7 @@
     },
     {
         "Day": "Friday",
+        "Time": "15:00",
         "Exercise": "Kettlebell Plank Drag Through",
         "Sets": "3",
         "Reps": "8 each side",
