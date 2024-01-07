@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const row = tbody.insertRow();
             row.insertCell().textContent = item.Exercise;
             row.insertCell().appendChild(createDayDropdown(item.Day));
-            row.insertCell().appendChild(createTimeDropdown(item.Time));
+            const timeCell = row.insertCell();
+            timeCell.appendChild(createTimeDropdown(item.Time));
             row.insertCell().textContent = item.Sets;
             row.insertCell().textContent = item.Reps;
             row.insertCell().textContent = item.Description;
@@ -63,18 +64,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createTimeDropdown(selectedTime) {
-        if (!selectedTime) {
-            selectedTime = "00:00"; // Default time if none is provided
-        }
         const select = document.createElement('select');
-        const [selectedHour, selectedMinute] = selectedTime.split(':').map(Number);
         for (let hour = 0; hour < 24; hour++) {
-            for (let minute = 0; minute < 60; minute += 15) {
+            for (let minute = 0; minute < 60; minute += 30) {
                 const timeValue = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
                 const option = document.createElement('option');
                 option.value = timeValue;
                 option.textContent = timeValue;
-                if (hour === selectedHour && minute === selectedMinute) option.selected = true;
+                if (selectedTime === timeValue) {
+                    option.selected = true;
+                }
                 select.appendChild(option);
             }
         }
