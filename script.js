@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function createTimeDropdown(selectedTime) {
         const select = document.createElement('select');
         for (let hour = 0; hour < 24; hour++) {
-            for (let minute = 0; minute < 60; minute += 30) {
+            for (let minute = 0; minute < 60; minute += 15) {
                 const timeValue = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
                 const option = document.createElement('option');
                 option.value = timeValue;
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function convertToICS() {
         const selectedTimezone = timezoneSelect.value;
-        const comp = new ICAL.Component('vcalendar');
+        const comp = new ICAL.Component(['vcalendar', [], []]);
         comp.updatePropertyWithValue('prodid', '-//Your Company//Your Product//EN');
 
         const calendarTable = document.querySelector('.calendar-table');
@@ -97,12 +97,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const momentDate = moment.tz(`${getFormattedDateForDay(eventDay)} ${eventTime}`, selectedTimezone);
             const endDate = momentDate.clone().add(1, 'hour');
-
-            const event = new ICAL.Event(new ICAL.Component('vevent'), comp);
-            event.summary = eventName;
-            event.description = eventDetails;
-            event.startDate = ICAL.Time.fromJSDate(momentDate.toDate());
-            event.endDate = ICAL.Time.fromJSDate(endDate.toDate());
+            
+            const vevent = new ICAL.Component('vevent');
+            vevent.updatePropertyWithValue('summary', eventName);
+            vevent.updatePropertyWithValue('dtstart', ICAL.Time.fromJSDate(momentDate.toDate(), true));
+            vevent.updatePropertyWithValue('dtend', ICAL.Time.fromJSDate(endDate.toDate(), true));
+            vevent.updatePropertyWithValue('description', eventDetails);
+            
+            comp.addSubcomponent(vevent);
         });
 
         const icsData = comp.toString();
