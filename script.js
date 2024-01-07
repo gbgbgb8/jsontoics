@@ -12,12 +12,16 @@ function displayEventsForEditing(events) {
     editor.innerHTML = '';
     events.forEach((event, index) => {
         for (const key in event) {
+            const label = document.createElement('label');
+            label.textContent = key + ': ';
             const input = document.createElement('input');
             input.type = 'text';
             input.value = event[key];
             input.dataset.eventIndex = index;
             input.dataset.eventKey = key;
-            editor.appendChild(input);
+            label.appendChild(input);
+            editor.appendChild(label);
+            editor.appendChild(document.createElement('br'));
         }
         editor.appendChild(document.createElement('br'));
     });
@@ -58,10 +62,12 @@ function generateIcsContent(events) {
 
 function formatDateToIcs(day, time) {
     const days = { "Monday": "MO", "Tuesday": "TU", "Wednesday": "WE", "Thursday": "TH", "Friday": "FR", "Saturday": "SA", "Sunday": "SU" };
-    const date = new Date();
-    date.setHours(...time.split(':'), 0);
-    const formattedDate = date.toISOString().replace(/[-:]/g, '').slice(0, 15);
-    return `${formattedDate};BYDAY=${days[day]}`;
+    const year = new Date().getFullYear();
+    let month = new Date().getMonth() + 1;
+    month = month < 10 ? '0' + month : month;
+    let dayOfMonth = new Date().getDate();
+    dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
+    return `${year}${month}${dayOfMonth}T${time.replace(':', '')}00`;
 }
 
 function downloadIcsFile(content) {
