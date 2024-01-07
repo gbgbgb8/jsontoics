@@ -80,7 +80,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function convertToICS() {
         const selectedTimezone = timezoneSelect.value;
-        const cal = new ics();
+        const { ICalendar } = datebook;
+
+        const icalendar = new ICalendar();
+
         const calendarTable = document.querySelector('.calendar-table');
         const rows = calendarTable.querySelectorAll('tbody tr');
 
@@ -93,13 +96,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const momentDate = moment.tz(`${getFormattedDateForDay(eventDay)} ${eventTime}`, selectedTimezone);
             const endDate = momentDate.clone().add(1, 'hour');
-            cal.addEvent(eventName, eventDetails, '', momentDate.toDate(), endDate.toDate());
+
+            const icalEvent = new datebook.ICalendarEvent({
+                title: eventName,
+                description: eventDetails,
+                start: momentDate.toDate(),
+                end: endDate.toDate(),
+            });
+
+            icalendar.addEvent(icalEvent);
         });
 
-        cal.download('events');
+        icalendar.download('calendar');
     }
 
     function getFormattedDateForDay(day) {
-        return moment().day(day).format('YYYY-MM-DD');
+        // Assuming the year is 2024, as previously discussed
+        // Mapping days to arbitrary dates in January 2024
+        const dayMap = {
+            'Monday': '20240101',
+            'Tuesday': '20240102',
+            'Wednesday': '20240103',
+            'Thursday': '20240104',
+            'Friday': '20240105',
+            'Saturday': '20240106',
+            'Sunday': '20240107'
+        };
+        return dayMap[day] || '20240101'; // Default to 'Monday' if something goes wrong
     }
 });
