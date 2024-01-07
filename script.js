@@ -3,13 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const calendarContainer = document.getElementById('calendarContainer');
     const downloadBtn = document.getElementById('downloadICS');
     const timezoneSelect = document.getElementById('timezone');
-    let eventData = [];
-
+    
     fileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
-        if (file && file.type === 'application/json') {
-            parseJSONFile(file);
-        }
+        parseJSONFile(file);
     });
 
     downloadBtn.addEventListener('click', function() {
@@ -19,45 +16,31 @@ document.addEventListener('DOMContentLoaded', function() {
     function parseJSONFile(file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            eventData = JSON.parse(e.target.result);
-            createSpreadsheetCalendar(eventData);
+            const data = JSON.parse(e.target.result);
+            createSpreadsheetCalendar(data);
         };
         reader.readAsText(file);
     }
 
     function createSpreadsheetCalendar(data) {
-        let table = document.createElement('table');
+        const table = document.createElement('table');
         table.className = 'calendar-table';
-        let thead = table.createTHead();
-        let tbody = table.appendChild(document.createElement('tbody'));
-        let headerRow = thead.insertRow();
-        let headers = ["Exercise", "Day", "Time", "Sets", "Reps", "Description"];
+        const thead = table.createTHead();
+        const tbody = table.appendChild(document.createElement('tbody'));
+        const headerRow = thead.insertRow();
+        const headers = ["Exercise", "Day", "Time", "Sets", "Reps", "Description"];
         
         headers.forEach(headerText => {
-            let header = document.createElement('th');
+            const header = document.createElement('th');
             header.textContent = headerText;
             headerRow.appendChild(header);
         });
 
         data.forEach(item => {
-            let row = tbody.insertRow();
+            const row = tbody.insertRow();
             row.insertCell().textContent = item.Exercise;
-
-            let dayCell = row.insertCell();
-            let daySelect = document.createElement('select');
-            ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].forEach(day => {
-                let option = document.createElement('option');
-                option.value = day;
-                option.textContent = day;
-                if (item.Day === day) option.selected = true;
-                daySelect.appendChild(option);
-            });
-            dayCell.appendChild(daySelect);
-
-            let timeCell = row.insertCell();
-            let timeSelect = createTimeDropdown(item.Time);
-            timeCell.appendChild(timeSelect);
-
+            row.insertCell().appendChild(createDayDropdown(item.Day));
+            row.insertCell().appendChild(createTimeDropdown(item.Time));
             row.insertCell().textContent = item.Sets;
             row.insertCell().textContent = item.Reps;
             row.insertCell().textContent = item.Description;
@@ -67,13 +50,25 @@ document.addEventListener('DOMContentLoaded', function() {
         calendarContainer.appendChild(table);
     }
 
+    function createDayDropdown(selectedDay) {
+        const daySelect = document.createElement('select');
+        ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].forEach(day => {
+            const option = document.createElement('option');
+            option.value = day;
+            option.textContent = day;
+            if (selectedDay === day) option.selected = true;
+            daySelect.appendChild(option);
+        });
+        return daySelect;
+    }
+
     function createTimeDropdown(selectedTime) {
-        let select = document.createElement('select');
-        let [selectedHour, selectedMinute] = selectedTime.split(':').map(Number);
+        const select = document.createElement('select');
+        const [selectedHour, selectedMinute] = selectedTime.split(':').map(Number);
         for (let hour = 0; hour < 24; hour++) {
             for (let minute = 0; minute < 60; minute += 15) {
-                let timeValue = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                let option = document.createElement('option');
+                const timeValue = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                const option = document.createElement('option');
                 option.value = timeValue;
                 option.textContent = timeValue;
                 if (hour === selectedHour && minute === selectedMinute) option.selected = true;
@@ -91,13 +86,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         rows.forEach(row => {
             const cells = row.cells;
-            let eventName = cells[0].textContent;
-            let eventDay = cells[1].querySelector('select').value;
-            let eventTime = cells[2].querySelector('select').value;
-            let eventDetails = cells[5].textContent;
+            const eventName = cells[0].textContent;
+            const eventDay = cells[1].querySelector('select').value;
+            const eventTime = cells[2].querySelector('select').value;
+            const eventDetails = cells[5].textContent;
 
-            let momentDate = moment.tz(`${getFormattedDateForDay(eventDay)} ${eventTime}`, selectedTimezone);
-            let endDate = momentDate.clone().add(1, 'hour');
+            const momentDate = moment.tz(`${getFormattedDateForDay(eventDay)} ${eventTime}`, selectedTimezone);
+            const endDate = momentDate.clone().add(1, 'hour');
             cal.addEvent(eventName, eventDetails, '', momentDate.toDate(), endDate.toDate());
         });
 
