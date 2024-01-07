@@ -1,0 +1,86 @@
+[
+    {
+        "Day": "Monday",
+        "Exercise": "Kettlebell Swings",
+        "Sets": "3",
+        "Reps": "10",
+        "Description": "Stand with feet shoulder-width, toes slightly out. Hinge at hips, grab kettlebell, swing to shoulder height, return."
+    },
+    {
+        "Day": "Monday",
+        "Exercise": "Goblet Squats",
+        "Sets": "3",
+        "Reps": "8",
+        "Description": "Hold kettlebell at chest, feet shoulder-width. Squat down, return to start."
+    },
+    {
+        "Day": "Monday",
+        "Exercise": "Single-Arm Kettlebell Rows",
+        "Sets": "3",
+        "Reps": "8 each arm",
+        "Description": "Staggered stance, one foot forward. Bend at hips, row kettlebell to side, return."
+    },
+    {
+        "Day": "Monday",
+        "Exercise": "Kettlebell Deadlifts",
+        "Sets": "3",
+        "Reps": "10",
+        "Description": "Kettlebell between feet. Bend at hips and knees, lift kettlebell, return."
+    },
+    {
+        "Day": "Wednesday",
+        "Exercise": "Turkish Get-Ups",
+        "Sets": "2",
+        "Reps": "5 each side",
+        "Description": "Lie back, arm holding kettlebell up. Roll onto elbow, stand up, reverse."
+    },
+    {
+        "Day": "Wednesday",
+        "Exercise": "Kettlebell Windmills",
+        "Sets": "3",
+        "Reps": "6 each side",
+        "Description": "Feet shoulder-width, kettlebell overhead. Bend at hips, lower torso, return."
+    },
+    {
+        "Day": "Wednesday",
+        "Exercise": "Kettlebell Russian Twists",
+        "Sets": "3",
+        "Reps": "15",
+        "Description": "Sit, feet off ground, twist torso with kettlebell, side to side."
+    },
+    {
+        "Day": "Wednesday",
+        "Exercise": "Kettlebell Halo",
+        "Sets": "3",
+        "Reps": "8 each direction",
+        "Description": "Hold kettlebell at chest, circle around head, reverse."
+    },
+    {
+        "Day": "Friday",
+        "Exercise": "Kettlebell Clean and Press",
+        "Sets": "3",
+        "Reps": "6 each arm",
+        "Description": "Lift kettlebell, rotate hand, press overhead, return."
+    },
+    {
+        "Day": "Friday",
+        "Exercise": "Kettlebell Lunges",
+        "Sets": "3",
+        "Reps": "8 each leg",
+        "Description": "Hold kettlebell at chest, step into lunge, return."
+    },
+    {
+        "Day": "Friday",
+        "Exercise": "Kettlebell High Pulls",
+        "Sets": "3",
+        "Reps": "10",
+        "Description": "Kettlebell between feet. Bend, pull up to shoulder, return."
+    },
+    {
+        "Day": "Friday",
+        "Exercise": "Kettlebell Plank Drag Through",
+        "Sets": "3",
+        "Reps": "8 each side",
+        "Description": "Plank position, drag kettlebell under torso, side to side."
+    }
+]

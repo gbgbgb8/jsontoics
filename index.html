@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet Calendar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" />
+    <style>
+        /* Custom styles for the app */
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .input-group { margin-bottom: 20px; }
+        select, button { padding: 5px; }
+        .calendar-table { width: 100%; border-collapse: collapse; }
+        .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .calendar-table th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <input type="file" id="jsonFileInput" accept=".json">
+        </div>
+        <div id="calendarContainer"></div>
+        <div class="input-group">
+            <button id="downloadICS">Download as ICS</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
