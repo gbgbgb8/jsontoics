@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const row = tbody.insertRow();
             row.insertCell().textContent = item.Exercise;
             row.insertCell().appendChild(createDayDropdown(item.Day));
-            row.insertCell().appendChild(createTimeDropdown(item.Time));
+            const timeCell = row.insertCell();
+            timeCell.appendChild(document.createTextNode(item.Time));
             row.insertCell().textContent = item.Sets;
             row.insertCell().textContent = item.Reps;
             row.insertCell().textContent = item.Description;
@@ -62,23 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return daySelect;
     }
 
-    function createTimeDropdown(selectedTime) {
-        const select = document.createElement('select');
-        for (let hour = 0; hour < 24; hour++) {
-            for (let minute = 0; minute < 60; minute += 15) {
-                const timeValue = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                const option = document.createElement('option');
-                option.value = timeValue;
-                option.textContent = timeValue;
-                if (selectedTime === timeValue) {
-                    option.selected = true;
-                }
-                select.appendChild(option);
-            }
-        }
-        return select;
-    }
-
     function convertToICS() {
         const selectedTimezone = timezoneSelect.value;
         const comp = new ICAL.Component(['vcalendar', [], []]);
@@ -91,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const cells = row.cells;
             const eventName = cells[0].textContent;
             const eventDay = cells[1].querySelector('select').value;
-            const eventTime = cells[2].querySelector('select').value;
+            const eventTime = cells[2].textContent;
             const eventDetails = cells[5].textContent;
 
             const momentDate = moment.tz(`${getFormattedDateForDay(eventDay)} ${eventTime}`, selectedTimezone);
