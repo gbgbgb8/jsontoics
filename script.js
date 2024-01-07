@@ -35,21 +35,22 @@ document.addEventListener('DOMContentLoaded', function() {
             header.textContent = headerText;
             headerRow.appendChild(header);
         });
-
+    
         data.forEach(item => {
             const row = tbody.insertRow();
             row.insertCell().textContent = item.Exercise;
             row.insertCell().appendChild(createDayDropdown(item.Day));
-            const timeCell = row.insertCell();
-            timeCell.appendChild(document.createTextNode(item.Time));
+            // Ensure the 'Time' attribute is correctly referenced
+            row.insertCell().textContent = item.Time; // Directly insert the 'Time' from the JSON data
             row.insertCell().textContent = item.Sets;
             row.insertCell().textContent = item.Reps;
             row.insertCell().textContent = item.Description;
         });
-
+    
         calendarContainer.innerHTML = '';
         calendarContainer.appendChild(table);
     }
+    
 
     function createDayDropdown(selectedDay) {
         const daySelect = document.createElement('select');
