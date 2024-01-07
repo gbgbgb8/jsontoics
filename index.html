@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spreadsheet Calendar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ics.js/2.27.0/ics.min.js"></script>
     <style>
-        /* Custom styles for the app */
         body { font-family: Arial, sans-serif; padding: 20px; }
         .container { max-width: 800px; margin: auto; }
         .input-group { margin-bottom: 20px; }
@@ -14,6 +16,7 @@
         .calendar-table { width: 100%; border-collapse: collapse; }
         .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         .calendar-table th { background-color: #f2f2f2; }
+        .timezone-select { margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -21,13 +24,19 @@
         <div class="input-group">
             <input type="file" id="jsonFileInput" accept=".json">
         </div>
+        <div class="input-group timezone-select">
+            <label for="timezone">Timezone:</label>
+            <select id="timezone">
+                <option value="Pacific/Pitcairn">Pacific Time (PT)</option>
+                <!-- Additional timezones can be added here if needed -->
+            </select>
+        </div>
         <div id="calendarContainer"></div>
         <div class="input-group">
             <button id="downloadICS">Download as ICS</button>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/umd.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
