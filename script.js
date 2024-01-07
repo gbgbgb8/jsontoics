@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const calendarContainer = document.getElementById('calendarContainer');
     const downloadBtn = document.getElementById('downloadICS');
     const timezoneSelect = document.getElementById('timezone');
-    
+
     fileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
         parseJSONFile(file);
@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createTimeDropdown(selectedTime) {
+        if (!selectedTime) {
+            selectedTime = "00:00"; // Default time if none is provided
+        }
         const select = document.createElement('select');
         const [selectedHour, selectedMinute] = selectedTime.split(':').map(Number);
         for (let hour = 0; hour < 24; hour++) {
@@ -80,9 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function convertToICS() {
         const selectedTimezone = timezoneSelect.value;
-        const { ICalendar } = datebook;
-
-        const icalendar = new ICalendar();
+        const comp = new ICAL.Component('vcalendar');
+        comp.updatePropertyWithValue('prodid', '-//Your Company//Your Product//EN');
 
         const calendarTable = document.querySelector('.calendar-table');
         const rows = calendarTable.querySelectorAll('tbody tr');
@@ -97,22 +99,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const momentDate = moment.tz(`${getFormattedDateForDay(eventDay)} ${eventTime}`, selectedTimezone);
             const endDate = momentDate.clone().add(1, 'hour');
 
-            const icalEvent = new datebook.ICalendarEvent({
-                title: eventName,
-                description: eventDetails,
-                start: momentDate.toDate(),
-                end: endDate.toDate(),
-            });
-
-            icalendar.addEvent(icalEvent);
+            const event = new ICAL.Event(new ICAL.Component('vevent'), comp);
+            event.summary = eventName;
+            event.description = eventDetails;
+            event.startDate = ICAL.Time.fromJSDate(momentDate.toDate());
+            event.endDate = ICAL.Time.fromJSDate(endDate.toDate());
         });
 
-        icalendar.download('calendar');
+        const icsData = comp.toString();
+        downloadICS(icsData, 'calendar.ics');
     }
 
     function getFormattedDateForDay(day) {
-        // Assuming the year is 2024, as previously discussed
-        // Mapping days to arbitrary dates in January 2024
         const dayMap = {
             'Monday': '20240101',
             'Tuesday': '20240102',
@@ -122,6 +120,18 @@ document.addEventListener('DOMContentLoaded', function() {
             'Saturday': '20240106',
             'Sunday': '20240107'
         };
-        return dayMap[day] || '20240101'; // Default to 'Monday' if something goes wrong
+        return dayMap[day] || '20240101';
+    }
+
+    function downloadICS(data, filename) {
+        const blob = new Blob([data], { type: 'text/calendar' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 });
