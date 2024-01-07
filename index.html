@@ -4,38 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON to ics iCal Converter</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.5.0/ical.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .input-group { margin-bottom: 20px; }
-        select, button { padding: 5px; }
-        .calendar-table { width: 100%; border-collapse: collapse; }
-        .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .calendar-table th { background-color: #f2f2f2; }
-        .timezone-select { margin-bottom: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #eventEditor input {
+            margin: 5px;
+        }
+        #downloadIcs {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="input-group">
-            <input type="file" id="jsonFileInput" accept=".json">
-        </div>
-        <div class="input-group timezone-select">
-            <label for="timezone">Timezone:</label>
-            <select id="timezone">
-                <option value="Pacific/Pitcairn">Pacific Time (PT)</option>
-                <!-- Additional timezones can be added here if needed -->
-            </select>
-        </div>
-        <div id="calendarContainer"></div>
-        <div class="input-group">
-            <button id="downloadICS">Download as ICS</button>
-        </div>
-    </div>
+    <h1>Kettlebell Workout Plan Converter</h1>
+    <input type="file" id="jsonInput" accept=".json">
+    <div id="eventEditor"></div>
+    <button id="downloadIcs">Download iCal File</button>
 
     <script src="script.js"></script>
 </body>
