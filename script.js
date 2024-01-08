@@ -23,14 +23,15 @@ function convertToICS(jsonData) {
     let icsEvents = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Your Organization//Your App//EN\n';
     jsonData.forEach(event => {
         const eventDate = getNextDateForDay(event.Day);
-        if (eventDate) {
+        const startTime = event.Time;
+        if (eventDate && startTime) {
             icsEvents += 'BEGIN:VEVENT\n';
             icsEvents += 'UID:' + generateUID() + '\n';
             icsEvents += 'DTSTAMP:' + formatDateToICS(new Date()) + '\n';
             icsEvents += 'SUMMARY:' + event.Exercise + '\n';
             icsEvents += 'DESCRIPTION:' + event.Description + ' | Sets: ' + event.Sets + ', Reps: ' + event.Reps + '\n';
-            icsEvents += 'DTSTART:' + formatDateToICS(eventDate, event.Time) + '\n';
-            icsEvents += 'DTEND:' + formatDateToICS(eventDate, event.Time, 60) + '\n'; // Assuming each event is 1 hour
+            icsEvents += 'DTSTART:' + formatDateToICS(eventDate, startTime) + '\n';
+            icsEvents += 'DTEND:' + formatDateToICS(eventDate, startTime, 60) + '\n'; // Assuming each event is 1 hour
             icsEvents += 'END:VEVENT\n';
         }
     });
