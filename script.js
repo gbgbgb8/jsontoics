@@ -22,16 +22,15 @@ document.getElementById('convertButton').addEventListener('click', () => {
 function convertToICS(jsonData) {
     let icsEvents = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Your Organization//Your App//EN\n';
     jsonData.forEach(event => {
-        const eventDate = getNextDateForDay(event.Day);
-        const startTime = event.Time;
-        if (eventDate && startTime) {
+        const startDate = formatDateToICS(event.Day, event.Time);
+        if (startDate) {
             icsEvents += 'BEGIN:VEVENT\n';
             icsEvents += 'UID:' + generateUID() + '\n';
             icsEvents += 'DTSTAMP:' + formatDateToICS(new Date()) + '\n';
             icsEvents += 'SUMMARY:' + event.Exercise + '\n';
             icsEvents += 'DESCRIPTION:' + event.Description + ' | Sets: ' + event.Sets + ', Reps: ' + event.Reps + '\n';
-            icsEvents += 'DTSTART:' + formatDateToICS(eventDate, startTime) + '\n';
-            icsEvents += 'DTEND:' + formatDateToICS(eventDate, startTime, 60) + '\n'; // Assuming each event is 1 hour
+            icsEvents += 'DTSTART:' + startDate + '\n';
+            icsEvents += 'DTEND:' + getEndDate(startDate) + '\n';
             icsEvents += 'END:VEVENT\n';
         }
     });
@@ -39,20 +38,34 @@ function convertToICS(jsonData) {
     return icsEvents;
 }
 
-function getNextDateForDay(dayOfWeek) {
-    const dayMap = { 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 0 };
+function formatDateToICS(day, time) {
     let date = new Date();
-    date.setDate(date.getDate() + (7 + dayMap[dayOfWeek] - date.getDay()) % 7);
+    date = getNextDateForDay(day, date);
+    const [hours, minutes] = time.split(':');
+    date.setHours(hours, minutes, 0, 0);
+    return formatICSDate(date);
+}
+
+function formatICSDate(date) {
+    return date.toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+}
+
+function getNextDateForDay(dayOfWeek, date) {
+    const dayMap = { 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 0 };
+    let targetDay = dayMap[dayOfWeek];
+    let currentDay = date.getDay();
+    let difference = targetDay - currentDay;
+    if (difference < 0) {
+        difference += 7;
+    }
+    date.setDate(date.getDate() + difference);
     return date;
 }
 
-function formatDateToICS(date, time, addMinutes = 0) {
-    if (time) {
-        const [hours, minutes] = time.split(':');
-        date.setHours(hours, minutes, 0, 0);
-    }
-    date.setMinutes(date.getMinutes() + addMinutes);
-    return date.toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+function getEndDate(startDate) {
+    let date = new Date(startDate);
+    date.setHours(date.getHours() + 1); // Assuming each event lasts 1 hour
+    return formatICSDate(date);
 }
 
 function generateUID() {
