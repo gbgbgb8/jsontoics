@@ -1,7 +1,7 @@
 document.getElementById('convertButton').addEventListener('click', () => {
     const fileInput = document.getElementById('jsonFile');
     const file = fileInput.files[0];
-    
+
     if (file) {
         const reader = new FileReader();
         reader.onload = function(event) {
@@ -18,12 +18,13 @@ document.getElementById('convertButton').addEventListener('click', () => {
 function convertToICS(jsonData) {
     let icsEvents = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Your Organization//Your App//EN\n';
     jsonData.forEach(event => {
-        if (event.Day && event.Time) {
+        const startDate = formatDate(event.Day, event.Time);
+        if (startDate) {
             icsEvents += `BEGIN:VEVENT\n`;
             icsEvents += `SUMMARY:${event.Exercise}\n`;
             icsEvents += `DESCRIPTION:${event.Description} | Sets: ${event.Sets}, Reps: ${event.Reps}\n`;
-            icsEvents += `DTSTART;VALUE=DATE:${formatDate(event.Day, event.Time)}\n`;
-            icsEvents += `DTEND;VALUE=DATE:${formatDate(event.Day, event.Time)}\n`;
+            icsEvents += `DTSTART;VALUE=DATE:${startDate}\n`;
+            icsEvents += `DTEND;VALUE=DATE:${startDate}\n`;
             icsEvents += `END:VEVENT\n`;
         }
     });
@@ -48,9 +49,12 @@ function formatDate(day, time) {
     };
     date.setDate(date.getDate() + ((7 + dayMap[day] - date.getDay()) % 7));
     const [hours, minutes] = time.split(':');
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    return date.toISOString().split('T')[0].replace(/-/g, '');
+    date.setHours(hours, minutes, 0);
+    return formatDateToICS(date);
+}
+
+function formatDateToICS(date) {
+    return date.toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
 }
 
 function downloadICS(icsData) {
