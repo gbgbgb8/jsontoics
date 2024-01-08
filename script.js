@@ -18,18 +18,24 @@ document.getElementById('convertButton').addEventListener('click', () => {
 function convertToICS(jsonData) {
     let icsEvents = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Your Organization//Your App//EN\n';
     jsonData.forEach(event => {
-        icsEvents += `BEGIN:VEVENT\n`;
-        icsEvents += `SUMMARY:${event.Exercise}\n`;
-        icsEvents += `DESCRIPTION:${event.Description} | Sets: ${event.Sets}, Reps: ${event.Reps}\n`;
-        icsEvents += `DTSTART;VALUE=DATE:${formatDate(event.Day, event.Time)}\n`;
-        icsEvents += `DTEND;VALUE=DATE:${formatDate(event.Day, event.Time)}\n`;
-        icsEvents += `END:VEVENT\n`;
+        if (event.Day && event.Time) {
+            icsEvents += `BEGIN:VEVENT\n`;
+            icsEvents += `SUMMARY:${event.Exercise}\n`;
+            icsEvents += `DESCRIPTION:${event.Description} | Sets: ${event.Sets}, Reps: ${event.Reps}\n`;
+            icsEvents += `DTSTART;VALUE=DATE:${formatDate(event.Day, event.Time)}\n`;
+            icsEvents += `DTEND;VALUE=DATE:${formatDate(event.Day, event.Time)}\n`;
+            icsEvents += `END:VEVENT\n`;
+        }
     });
     icsEvents += 'END:VCALENDAR';
     return icsEvents;
 }
 
 function formatDate(day, time) {
+    if (!day || !time) {
+        return '';
+    }
+
     const date = new Date();
     const dayMap = {
         'Monday': 1,
