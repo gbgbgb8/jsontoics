@@ -11,7 +11,7 @@ function displayEventsForEditing(events) {
     const editor = document.getElementById('eventEditor');
     editor.innerHTML = '';
     events.forEach((event, index) => {
-        for (const key in event) {
+        Object.keys(event).forEach(key => {
             const label = document.createElement('label');
             label.textContent = key + ': ';
             const input = document.createElement('input');
@@ -22,7 +22,7 @@ function displayEventsForEditing(events) {
             label.appendChild(input);
             editor.appendChild(label);
             editor.appendChild(document.createElement('br'));
-        }
+        });
         editor.appendChild(document.createElement('br'));
     });
     document.getElementById('downloadIcs').style.display = 'block';
