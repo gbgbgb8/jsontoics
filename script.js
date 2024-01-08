@@ -5,9 +5,13 @@ document.getElementById('convertButton').addEventListener('click', () => {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(event) {
-            const jsonData = JSON.parse(event.target.result);
-            const icsData = convertToICS(jsonData);
-            downloadICS(icsData);
+            try {
+                const jsonData = JSON.parse(event.target.result);
+                const icsData = convertToICS(jsonData);
+                downloadICS(icsData);
+            } catch (e) {
+                alert('Error parsing JSON file: ' + e.message);
+            }
         };
         reader.readAsText(file);
     } else {
@@ -18,43 +22,40 @@ document.getElementById('convertButton').addEventListener('click', () => {
 function convertToICS(jsonData) {
     let icsEvents = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Your Organization//Your App//EN\n';
     jsonData.forEach(event => {
-        const startDate = formatDate(event.Day, event.Time);
-        if (startDate) {
-            icsEvents += `BEGIN:VEVENT\n`;
-            icsEvents += `SUMMARY:${event.Exercise}\n`;
-            icsEvents += `DESCRIPTION:${event.Description} | Sets: ${event.Sets}, Reps: ${event.Reps}\n`;
-            icsEvents += `DTSTART;VALUE=DATE:${startDate}\n`;
-            icsEvents += `DTEND;VALUE=DATE:${startDate}\n`;
-            icsEvents += `END:VEVENT\n`;
+        const eventDate = getNextDateForDay(event.Day);
+        if (eventDate) {
+            icsEvents += 'BEGIN:VEVENT\n';
+            icsEvents += 'UID:' + generateUID() + '\n';
+            icsEvents += 'DTSTAMP:' + formatDateToICS(new Date()) + '\n';
+            icsEvents += 'SUMMARY:' + event.Exercise + '\n';
+            icsEvents += 'DESCRIPTION:' + event.Description + ' | Sets: ' + event.Sets + ', Reps: ' + event.Reps + '\n';
+            icsEvents += 'DTSTART:' + formatDateToICS(eventDate, event.Time) + '\n';
+            icsEvents += 'DTEND:' + formatDateToICS(eventDate, event.Time, 60) + '\n'; // Assuming each event is 1 hour
+            icsEvents += 'END:VEVENT\n';
         }
     });
     icsEvents += 'END:VCALENDAR';
     return icsEvents;
 }
 
-function formatDate(day, time) {
-    if (!day || !time) {
-        return '';
-    }
-
-    const date = new Date();
-    const dayMap = {
-        'Monday': 1,
-        'Tuesday': 2,
-        'Wednesday': 3,
-        'Thursday': 4,
-        'Friday': 5,
-        'Saturday': 6,
-        'Sunday': 0
-    };
-    date.setDate(date.getDate() + ((7 + dayMap[day] - date.getDay()) % 7));
-    const [hours, minutes] = time.split(':');
-    date.setHours(hours, minutes, 0);
-    return formatDateToICS(date);
+function getNextDateForDay(dayOfWeek) {
+    const dayMap = { 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 0 };
+    let date = new Date();
+    date.setDate(date.getDate() + (7 + dayMap[dayOfWeek] - date.getDay()) % 7);
+    return date;
 }
 
-function formatDateToICS(date) {
+function formatDateToICS(date, time, addMinutes = 0) {
+    if (time) {
+        const [hours, minutes] = time.split(':');
+        date.setHours(hours, minutes, 0, 0);
+    }
+    date.setMinutes(date.getMinutes() + addMinutes);
     return date.toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+}
+
+function generateUID() {
+    return 'uid-' + Math.random().toString(36).substr(2, 9) + '@example.com';
 }
 
 function downloadICS(icsData) {
